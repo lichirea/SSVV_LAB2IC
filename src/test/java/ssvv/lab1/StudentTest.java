@@ -9,13 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import repository.StudentFileRepository;
 
-public class StudentTest {
+public class StudentTest extends TestCase{
     validation.StudentValidator studentValidator;
 
     repository.StudentXMLRepo studentXMLRepository;
 
     @BeforeEach
-    void setUp() {
+     public void setUp() {
         this.studentValidator = new validation.StudentValidator();
         String filenameStudent = "fisiere/testStudents.xml";
         this.studentXMLRepository = new repository.StudentXMLRepo(filenameStudent);
@@ -23,14 +23,14 @@ public class StudentTest {
 
 
     @Test
-    void testAdd() {
+    public void testAdd() {
         this.studentXMLRepository.delete("1");
         domain.Student s = new Student("1", "TESTNUME", 55, "a@test.com");
         Assert.assertNull(this.studentXMLRepository.save(s));
     }
 
     @Test
-    void testAddTwice() {
+    public void testAddTwice() {
         this.studentXMLRepository.delete("1");
         domain.Student s = new Student("1", "TESTNUME", 55, "a@test.com");
         Assert.assertNull(this.studentXMLRepository.save(s));
