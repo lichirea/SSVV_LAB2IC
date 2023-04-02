@@ -23,7 +23,6 @@ public class StudentTest {
 
 
     @Test
-    @DisplayName("Simple add student should work")
     void testAdd() {
         this.studentXMLRepository.delete("1");
         domain.Student s = new Student("1", "TESTNUME", 55, "a@test.com");
@@ -31,7 +30,6 @@ public class StudentTest {
     }
 
     @Test
-    @DisplayName("Shouldn't work to add same student twice")
     void testAddTwice() {
         this.studentXMLRepository.delete("1");
         domain.Student s = new Student("1", "TESTNUME", 55, "a@test.com");
