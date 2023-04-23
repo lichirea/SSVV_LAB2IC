@@ -12,6 +12,7 @@ import repository.StudentFileRepository;
 import service.Service;
 
 import java.util.Collection;
+import java.util.Scanner;
 
 public class AssignmentTest extends TestCase{
     validation.TemaValidator temaValidator;
@@ -54,16 +55,34 @@ public class AssignmentTest extends TestCase{
             Assert.assertEquals(total, ((Collection<?>) this.service.getAllTeme()).size());
             Assert.assertEquals(error.getMessage(), "Deadlineul trebuie sa fie intre 1-14.");
         }
+    }
 
-        t = new domain.Tema("5", "nume", 5, 1);
+    @Test
+    public void testPrimireValidation() {
+        this.service.deleteTema("5");
+
+        domain.Tema t = new domain.Tema("5", "nume", 5, 15);
+        int total =  ((Collection<?>) this.service.getAllTeme()).size();
+
+        try {
+            this.service.addTema(t);
+            Assert.fail();
+        } catch (validation.ValidationException error) {
+            Assert.assertNull(this.service.findTema("5"));
+            Assert.assertEquals(total, ((Collection<?>) this.service.getAllTeme()).size());
+            Assert.assertEquals(error.getMessage(), "Saptamana primirii trebuie sa fie intre 1-14.");
+        }
+
+        t = new domain.Tema("5", "nume", 5, 0);
         total =  ((Collection<?>) this.service.getAllTeme()).size();
 
         try {
-            Assert.assertNull(this.service.addTema(t));
-            Assert.assertEquals(total + 1, ((Collection<?>) this.service.getAllTeme()).size());
-            Assert.assertEquals(t, this.service.findTema("5")); ;
-        } catch (validation.ValidationException error) {
+            this.service.addTema(t);
             Assert.fail();
+        } catch (validation.ValidationException error) {
+            Assert.assertNull(this.service.findTema("5"));
+            Assert.assertEquals(total, ((Collection<?>) this.service.getAllTeme()).size());
+            Assert.assertEquals(error.getMessage(), "Saptamana primirii trebuie sa fie intre 1-14.");
         }
     }
 
@@ -92,9 +111,31 @@ public class AssignmentTest extends TestCase{
             Assert.assertEquals(total, ((Collection<?>) this.service.getAllTeme()).size());
             Assert.assertEquals(error.getMessage(), "Numar tema invalid!");
         }
+    }
 
-        t = new domain.Tema("5", "nume", 5, 1);
-        total =  ((Collection<?>) this.service.getAllTeme()).size();
+    @Test
+    public void testDescriereValidation() {
+        this.service.deleteTema("5");
+
+        domain.Tema t = new domain.Tema("5", "", 5, 1);
+        int total =  ((Collection<?>) this.service.getAllTeme()).size();
+
+        try {
+            this.service.addTema(t);
+            Assert.fail();
+        } catch (validation.ValidationException error) {
+            Assert.assertEquals(total, ((Collection<?>) this.service.getAllTeme()).size());
+            Assert.assertEquals(error.getMessage(), "Descriere invalida!");
+        }
+    }
+
+
+    @Test
+    public void testAddSuccess() {
+        this.service.deleteTema("5");
+
+        domain.Tema t = new domain.Tema("5", "descriere", 5, 5);
+        int total =  ((Collection<?>) this.service.getAllTeme()).size();
 
         try {
             Assert.assertNull(this.service.addTema(t));
@@ -102,6 +143,8 @@ public class AssignmentTest extends TestCase{
             Assert.assertEquals(t, this.service.findTema("5")); ;
         } catch (validation.ValidationException error) {
             Assert.fail();
+
         }
+
     }
 }
